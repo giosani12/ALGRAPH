@@ -5,18 +5,21 @@ import java.util.Vector;
 public class GraphFX {
 
     private Vector<myNode> nodes;
-    private int[][] weights;
+    private Vector<Vector<myConn>> weights;
     private int dimension;
     private int capacity;
 
     public GraphFX(int dim) {
         capacity=dim;
         dimension=0;
+        myConn e=new myConn(1048576);
         for (int i=0; i<dim; i++) {
             myNode pippo= new myNode(dim,i);
             nodes.add(i,pippo);
             for (int j=i+1; j<dim; j++) {
-                weights[i][j]=1048576;
+                Vector<myConn> temp = new Vector<myConn>();
+                temp.add(j,e);
+                weights.add(i,temp);
             }
         }
     }
@@ -30,20 +33,48 @@ public class GraphFX {
     }
 
     public void addConnection(int a, int b, int weight) {
+        myConn newconn =new myConn(weight);
+        Vector<myConn> tmp= new Vector<myConn>();
         if (a<b) {
-            weights[a][b]=weight;
+            tmp.add(b,newconn);
+            weights.add(a,tmp);
             nodes.get(a).addConnection(b);
             nodes.get(b).addConnection(a);
         }
         else {
-            weights[b][a]=weight;
+            tmp.add(a,newconn);
+            weights.add(b,tmp);
             nodes.get(a).addConnection(b);
             nodes.get(b).addConnection(a);
         }
     }
 
+    public int rmConnection(int a, int b) {
+        int out;
+        if (a<b) {
+            out=weights.get(a).remove(b).getWeight();
+            nodes.get(a).removeConnection(b);
+            nodes.get(b).removeConnection(a);
+        }
+        else {
+            out=weights.get(b).remove(a).getWeight();
+            nodes.get(a).removeConnection(b);
+            nodes.get(b).removeConnection(a);
+        }
+        return out;
+    }
+
+    public void rmConnection(int a) {
+        Vector<myNode> temp = adjs(a);
+        int i=0;
+        while (i<temp.size()) {
+            rmConnection(a, temp.get(i).getPos());
+        }
+    }
+
     public myNode removeNode(int id) {
         if (id<dimension) {
+            rmConnection(id);
             myNode out = nodes.get(id).removeNode();
             for (int i=0;i<dimension;i++) {
                 nodes.get(i).removeConnection(id);
@@ -69,8 +100,8 @@ public class GraphFX {
     }
 
     public int getConnection(int a, int b) {
-        if (a < b) return weights[a][b];
-        else return weights[b][a];
+        if (a < b) return weights.get(a).get(b).getWeight();
+        else return weights.get(b).get(a).getWeight();
     }
 
     public Vector<myNode> johnsonAlg(myNode r) {

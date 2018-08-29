@@ -20,6 +20,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception{
         primaryStage.setTitle("ALGRAPH Algoritmo di Johnson");
         GridPane grid = new GridPane();
+
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);

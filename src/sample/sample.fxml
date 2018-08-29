@@ -1,8 +1,16 @@
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.GridPane?>
+<?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<GridPane fx:controller="sample.Controller"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10">
-</GridPane>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="552.0" prefWidth="715.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button mnemonicParsing="false" onMouseClicked="#caricaGrafo" text="Carica grafo" />
+      <Button layoutX="386.0" layoutY="6.0" mnemonicParsing="false" text="Genera grafo" />
+      <Button layoutX="260.0" layoutY="88.0" mnemonicParsing="false" text="Salva" />
+      <Button layoutX="442.0" layoutY="218.0" mnemonicParsing="false" text="Nodo" />
+      <TextField layoutX="199.0" layoutY="6.0" />
+      <Button layoutX="386.0" layoutY="218.0" mnemonicParsing="false" text="Edge" />
+   </children>
+</AnchorPane>

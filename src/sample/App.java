@@ -44,6 +44,12 @@ public class App extends Application {
         SIhbBtn.getChildren().add(SIbtn);
         grid.add(SIhbBtn, 0, 2);
 
+        /*
+        SIbtn.setOnAction(new EventHandler<ActionEvent>() {
+    @Override public void handle(ActionEvent e)
+});
+        */
+
         Button Gbtn = new Button("Carica Grafo");
         HBox GhbBtn = new HBox(10);
         GhbBtn.setAlignment(Pos.BOTTOM_RIGHT);

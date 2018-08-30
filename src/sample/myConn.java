@@ -1,6 +1,8 @@
 package sample;
 
-public class myConn {
+import javafx.scene.shape.Line;
+
+public class myConn extends Line {
     private int weight;
 
     public myConn(int in) {

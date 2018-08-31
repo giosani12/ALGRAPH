@@ -3,12 +3,19 @@ package sample;
 import javafx.scene.shape.Line;
 
 public class myConn extends Line {
+
     private int weight;
 
     public myConn(int in) {
         weight=in;
     }
 
+    public void setCoords(double ax, double ay, double bx, double by) {
+        setStartX(ax);
+        setStartY(ay);
+        setEndX(bx);
+        setEndY(by);
+    }
     public int getWeight() {
         return weight;
     }

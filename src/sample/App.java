@@ -1,25 +1,30 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 
 public class App extends Application {
+    public PriorityHeap temp = new PriorityHeap(4);
     @Override
     public void start(Stage primaryStage) throws Exception{
-        primaryStage.setTitle("ALGRAPH Algoritmo di Johnson");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("mainUI.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        /*primaryStage.setTitle("ALGRAPH Algoritmo di Johnson");
         GridPane grid = new GridPane();
+
+        myNode a = new myNode(4,0);
+        myNode b = new myNode(4,1);
+        temp.insert(a,1);
+        temp.insert(b,2);
+        temp.writeToFile();
+        temp.readFromFile(4);
+        temp.writeToFile();
 
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -49,9 +54,13 @@ public class App extends Application {
         HBox GhbBtn = new HBox(10);
         GhbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         GhbBtn.getChildren().add(Gbtn);
-        grid.add(GhbBtn, 3, 2);
+        grid.add(GhbBtn, 3, 2);*/
 
         primaryStage.setResizable(false);
         primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

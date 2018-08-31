@@ -2,17 +2,18 @@ package sample;
 
 import javafx.scene.shape.Circle;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class myNode extends Circle {
     private boolean[] connections;
     private int pos;
     private int priority;
-    private int MAX_x;
-    private int MAX_y;
+
 
     public myNode(int dim, int POS, int PRIORITY) {
         connections = new boolean[dim];
-        /*Xpos=0;
-        Ypos=0;*/
         pos=POS;
         priority=PRIORITY;
         for (int i=0; i<dim; i++) {
@@ -22,8 +23,6 @@ public class myNode extends Circle {
 
     public myNode(int dim, int POS) {
         connections = new boolean[dim];
-        /*Xpos=0;
-        Ypos=0;*/
         pos=POS;
         priority=0;
         for (int i=0; i<dim; i++) {
@@ -31,14 +30,49 @@ public class myNode extends Circle {
         }
     }
 
-    public boolean setPosition(int x, int y) {
-        if ((-1<x)&&(x<MAX_x)&&(-1<y)&&(x<MAX_y)) {
-            setCenterX(x);
-            setCenterY(y);
-            return true;
+    public myNode(int dim, int POS, double X, double Y) {
+        connections = new boolean[dim];
+        setCenterX(X);
+        setCenterY(Y);
+        setRadius(10.0);
+        pos=POS;
+        priority=0;
+        for (int i=0; i<dim; i++) {
+            connections[i]=false;
         }
-        else return false;
     }
+
+    public void setPosition(int x, int y) {
+        setCenterX(x);
+        setCenterY(y);
+    }
+
+    public void saveNode(FileOutputStream stream) throws IOException
+    {
+        stream.write(pos);
+        stream.write(priority);
+        for (boolean item : connections)
+        {
+            stream.write(item ? 1 : 0);
+        }
+    }
+
+    public void loadNode(FileInputStream stream, int lenght) throws IOException
+    {
+        byte[] data = new byte[lenght];
+        pos=stream.read();
+        priority=stream.read();
+        stream.read(data,0,lenght);
+        for (int X = 0; X < lenght; X++)
+        {
+            if (data[X] != 0)
+            {
+                connections[X] = true;
+                continue;
+            }
+            connections[X] = false;
+        }
+     }
 
     /*public void setPositions(int X, int Y) {
         Xpos=X;
@@ -60,6 +94,10 @@ public class myNode extends Circle {
     public void setPriority(int PRIORITY) { priority=PRIORITY; }
 
     public void setPos(int POS) { pos=POS; }
+
+    public boolean getConnection(int sel) {
+        return connections[sel];
+    }
 
     public void addConnection(int adj) {
         connections[adj]=true;

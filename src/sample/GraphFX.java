@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class GraphFX {
 
     private ArrayList<myNode> nodes;
-    private ArrayList<ArrayList<myConn>> weights;
+    //private ArrayList<ArrayList<myConn>> weights;
+    private myConn weights[][];
     private int dimension;
     private int conns;
     private int capacity;
@@ -15,27 +16,8 @@ public class GraphFX {
         dimension=0;
         conns=0;
         nodes = new ArrayList<myNode>(dim);
-        weights= new ArrayList<ArrayList<myConn>>(dim);
-        /*myConn e=new myConn(1048576);
-        for (int i=0; i<dim; i++) {
-            myNode pippo= new myNode(dim,i);
-            nodes.add(i,pippo);
-            for (int j=i+1; j<dim; j++) {
-                ArrayList<myConn> temp = new ArrayList<myConn>();
-                temp.add(j,e);
-                weights.add(i,temp);
-            }
-        }*/
+        weights= new myConn[dim][dim];
     }
-
-    /*public GraphFX(int dim, int size) {
-        capacity=dim;
-        dimension=0;
-        conns=0;
-        for (int i=0; i<size; i++) {
-
-        }
-    }*/
 
     public ArrayList<myNode> getNodes() {
         return nodes;
@@ -45,13 +27,18 @@ public class GraphFX {
         return conns;
     }
 
-    public void addNode() {
+    public int getDimension() {
+        return dimension;
+    }
+
+    public boolean addNode() {
         if (dimension<capacity) {
             myNode temp= new myNode(capacity,dimension);
             nodes.add(dimension,temp);
             dimension++;
+            return true;
         }
-        //else doubleArray(), addNode()
+        else return false;
     }
 
     public void addNode(double X, double Y) {
@@ -63,55 +50,61 @@ public class GraphFX {
         //else doubleArray(), addNode()
     }
 
-    public void addConnection(int a, int b) {
+    public myConn addConnection(int a, int b) {
         int weight= (int)Math.sqrt(((nodes.get(a).getCenterX()-nodes.get(b).getCenterX())*(nodes.get(a).getCenterX()-nodes.get(b).getCenterX()))+((nodes.get(a).getCenterY()-nodes.get(b).getCenterY())*(nodes.get(a).getCenterY()-nodes.get(b).getCenterY())));
         myConn newconn =new myConn(weight);
-        ArrayList<myConn> tmp= new ArrayList<myConn>();
+        newconn.setCoords(nodes.get(a).getCenterX(),nodes.get(a).getCenterY(),nodes.get(b).getCenterX(),nodes.get(b).getCenterY());
+        myConn[] tmp= new myConn[dimension];
         if (a<b) {
-            tmp.add(b,newconn);
-            weights.add(a,tmp);
-            weights.get(a).get(b).setCoords(nodes.get(a).getCenterX(),nodes.get(a).getCenterY(),nodes.get(b).getCenterX(),nodes.get(b).getCenterY());
+            tmp[b]=newconn;
+            weights[a]=tmp;
+            weights[a][b].setCoords(nodes.get(a).getCenterX(),nodes.get(a).getCenterY(),nodes.get(b).getCenterX(),nodes.get(b).getCenterY());
             nodes.get(a).addConnection(b);
             nodes.get(b).addConnection(a);
         }
-        else {
-            tmp.add(a,newconn);
-            weights.add(b,tmp);
-            weights.get(a).get(b).setCoords(nodes.get(a).getCenterX(),nodes.get(a).getCenterY(),nodes.get(b).getCenterX(),nodes.get(b).getCenterY());
+        else if (a!=b){
+            tmp[a]=newconn;
+            weights[b]=tmp;
+            weights[b][a].setCoords(nodes.get(b).getCenterX(),nodes.get(b).getCenterY(),nodes.get(a).getCenterX(),nodes.get(a).getCenterY());
             nodes.get(a).addConnection(b);
             nodes.get(b).addConnection(a);
         }
         conns=conns+1;
+        return newconn;
     }
 
-    public void addRandomConnection() {
+    public myConn addRandomConnection() {
         int sel=(int) (Math.random()*(dimension-1));
         int sel2=(int) (Math.random()*(dimension-1));
+        myConn temp;
         if (sel<sel2) {
             if (!nodes.get(sel).getConnection(sel2)) {
-                addConnection(sel,sel2);
+                temp=addConnection(sel,sel2);
                 conns=conns+1;
+                return temp;
             }
             else addRandomConnection();
         }
         else if (sel!=sel2){
             if (!nodes.get(sel2).getConnection(sel)) {
-                addConnection(sel2,sel);
+                temp=addConnection(sel2,sel);
                 conns=conns+1;
+                return temp;
             }
             else addRandomConnection();
         }
+        return null;
     }
 
     public int rmConnection(int a, int b) {
         int out;
         if (a<b) {
-            out=weights.get(a).remove(b).getWeight();
+            out=weights[a][b].getWeight();
             nodes.get(a).removeConnection(b);
             nodes.get(b).removeConnection(a);
         }
         else {
-            out=weights.get(b).remove(a).getWeight();
+            out=weights[b][a].getWeight();
             nodes.get(a).removeConnection(b);
             nodes.get(b).removeConnection(a);
         }
@@ -154,8 +147,13 @@ public class GraphFX {
     }
 
     public int getConnection(int a, int b) {
-        if (a < b) return weights.get(a).get(b).getWeight();
-        else return weights.get(b).get(a).getWeight();
+        if (a < b) return weights[a][b].getWeight();
+        else return weights[b][a].getWeight();
+    }
+
+    public myConn getConnectionObj(int a, int b) {
+        if (a < b) return weights[a][b];
+        else return weights[b][a];
     }
 
     public ArrayList<myNode> johnsonAlg(myNode r) {
@@ -203,6 +201,7 @@ public class GraphFX {
         int i=0;
         while (i<edges) {
             addRandomConnection();
+            i++;
         }
     }
 

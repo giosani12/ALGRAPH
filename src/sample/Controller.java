@@ -15,6 +15,17 @@ public class Controller {
 
     }
 
+    public void saveOnAction(javafx.event.ActionEvent actionEvent) {
+        PriorityHeap temp=new PriorityHeap(4);
+        myNode a = new myNode(4,0);
+        myNode b = new myNode(4,1);
+        temp.insert(a,0);
+        temp.insert(b,1);
+        temp.writeToFile();
+        temp.readFromFile(4);
+        temp.writeToFile();
+    }
+
     public void newGraphOnAction(javafx.event.ActionEvent actionEvent) {
         mainGraph = new GraphFX(128);
         mainGraph.randomGraph(5);

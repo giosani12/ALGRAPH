@@ -15,14 +15,6 @@ public class App extends Application {
         Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
-        /*myNode a = new myNode(4,0);
-        myNode b = new myNode(4,1);
-        temp.insert(a,1);
-        temp.insert(b,2);
-        temp.writeToFile();
-        temp.readFromFile(4);
-        temp.writeToFile();
-        */
         primaryStage.setResizable(false);
         primaryStage.show();
     }

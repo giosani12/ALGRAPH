@@ -1,19 +1,23 @@
 package sample;
 
-import java.util.Vector;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class PriorityHeap {
     private int dimension;
     private int capacity;
-    private Vector<myNode> H;
+    private ArrayList<myNode> H;
 
     public PriorityHeap(int n) {
         capacity=n;
         dimension=0;
-        H= new Vector<myNode>(n);
+        H= new ArrayList<myNode>(n);
         for (int i=0; i<n; i++) {
-            H.get(i).setPriority(0);
-            H.get(i).setPos(i);
+            myNode tmp = new myNode(n,i,0);
+            H.add(i, tmp);
         }
     }
 
@@ -30,8 +34,8 @@ public class PriorityHeap {
             int i=dimension;
             while ((i>1)&&(H.get(i).getPriority()<H.get((int)1/2).getPriority())) {
                 myNode temp=H.get(i);
-                H.insertElementAt(H.get((int)i/2),i);
-                H.insertElementAt(temp,(int)i/2);
+                H.add(i, H.get((int)i/2));
+                H.add((int)i/2, temp);
                 H.get(i).setPos(i);
                 H.get((int)i/2).setPos((int)i/2);
                 i=(int)i/2;
@@ -41,14 +45,14 @@ public class PriorityHeap {
         else return null;
     }
 
-    private void minHeapRestore(Vector<myNode> A, int i, int dim) {
+    private void minHeapRestore(ArrayList<myNode> A, int i, int dim) {
         int min =i;
         if ((2*i<=dim)&&(A.get(2*i).getPriority()<A.get(min).getPriority())) min=2*i;
         if ((2*i+1<=dim)&&(A.get(2*i+1).getPriority()<A.get(min).getPriority())) min=2*i+1;
         if (i!=min) {
             myNode temp=H.get(i);
-            H.insertElementAt(H.get(min),i);
-            H.insertElementAt(temp,min);
+            H.add(i, H.get(min));
+            H.add(min, temp);
             H.get(i).setPos(i);
             H.get(min).setPos(min);
             minHeapRestore(A,min,dim);
@@ -58,8 +62,8 @@ public class PriorityHeap {
     public myNode deleteMin() {
         if (dimension>0) {
             myNode temp=H.get(1);
-            H.insertElementAt(H.get(dimension),1);
-            H.insertElementAt(temp,dimension);
+            H.add(1,H.get(dimension));
+            H.add(dimension, temp);
             H.get(1).setPos(1);
             H.get(dimension).setPos(dimension);
             dimension=dimension-1;
@@ -75,13 +79,51 @@ public class PriorityHeap {
             int i = x.getPos();
             while ((i > 1) && (H.get(i).getPriority() < H.get((int) i / 2).getPriority())) {
                 myNode temp = H.get(i);
-                H.insertElementAt(H.get((int) i / 2), i);
-                H.insertElementAt(temp, (int) i / 2);
+                H.add(i, H.get((int) i / 2));
+                H.add((int) i / 2, temp);
                 H.get(i).setPos(i);
                 H.get((int) i / 2).setPos((int) i / 2);
                 i = (int) i / 2;
             }
         }
+    }
+
+    private java.lang.String getLatestNumber() {
+        int i=0;
+        File tmp = new File("./data/PH"+Integer.toString(i)+".ph");
+        while (tmp.exists()) {
+            i++;
+            tmp = new File("./data/PH"+Integer.toString(i)+".ph");
+        }
+        return Integer.toString(i);
+    }
+
+    public boolean writeToFile() {
+        try (FileOutputStream output = new FileOutputStream(new File("./data/PH"+getLatestNumber()+".ph"));) {
+            output.write(dimension);
+            output.write(capacity);
+            for (int i=0;i<dimension; i++) {
+                H.get(i).saveNode(output);
+            }
+        } catch (IOException x) {
+            System.err.println(x);
+            return false;
+        }
+        return true;
+    }
+
+    public boolean readFromFile(int select) {
+        try (FileInputStream input = new FileInputStream(new File("./data/PH"+Integer.toString(select)+".ph"));) {
+            dimension = input.read();
+            capacity = input.read();
+            for (int i = 0; i < dimension; i++) {
+                H.get(i).loadNode(input, dimension);
+            }
+        } catch (IOException x) {
+            System.err.println(x);
+            return false;
+        }
+        return true;
     }
 
     public boolean isEmpty() { return dimension==0; }

@@ -8,11 +8,19 @@
 
 <Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
       <children>
+<<<<<<< HEAD
          <Button layoutX="36.0" layoutY="8.0" mnemonicParsing="false" onAction="#loadGraphOnAction" prefHeight="31.0" prefWidth="108.0" text="Carica grafo" />
          <Button layoutX="387.0" layoutY="8.0" mnemonicParsing="false" onAction="#newGraphOnAction" prefHeight="31.0" prefWidth="108.0" text="Genera grafo" />
          <Button layoutX="594.0" layoutY="8.0" mnemonicParsing="false" onAction="#newNodeOnAction" text="Nodo" />
          <Button layoutX="541.0" layoutY="8.0" mnemonicParsing="false" onAction="#newConnOnAction" prefWidth="57.63" text="Edge" />
          <Button layoutX="681.0" layoutY="8.0" mnemonicParsing="false" onAction="#saveGraphOnAction" prefHeight="31.0" prefWidth="84.0" text="Salva" />
+=======
+         <Button layoutX="36.0" layoutY="8.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="108.0" text="Carica grafo" />
+         <Button layoutX="387.0" layoutY="8.0" mnemonicParsing="false" onAction="#newGraphOnAction" prefHeight="31.0" prefWidth="108.0" text="Genera grafo" />
+         <Button layoutX="594.0" layoutY="8.0" mnemonicParsing="false" onAction="#newNodeOnAction" text="Nodo" />
+         <Button layoutX="541.0" layoutY="8.0" mnemonicParsing="false" prefWidth="57.63" text="Edge" />
+         <Button layoutX="681.0" layoutY="8.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="84.0" text="Salva" />
+>>>>>>> fbd946a6a4c1ab1c9e2d44b45da07413f075b539
          <TextField layoutX="201.0" layoutY="8.0" text="Inserisci numero nodi" />
          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="422.0" layoutX="36.0" layoutY="50.0" stroke="BLACK" strokeType="INSIDE" width="729.0" />
       <TextArea layoutX="36.0" layoutY="476.0" prefHeight="110.0" prefWidth="729.0" text="CASELLA DI TESTO" />

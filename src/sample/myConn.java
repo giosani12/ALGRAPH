@@ -4,23 +4,23 @@ import javafx.scene.shape.Line;
 
 public class myConn extends Line {
 
-    private int weight;
+    private int weight; // peso della linea
 
-    public myConn(int in) {
+    public myConn(int in) { // costruttore che imposta il peso della connessione
         weight=in;
     }
 
-    public void setCoords(double ax, double ay, double bx, double by) {
+    public void setCoords(double ax, double ay, double bx, double by) { // imposta coordinate degli estremi della linea
         setStartX(ax);
         setStartY(ay);
         setEndX(bx);
         setEndY(by);
     }
-    public int getWeight() {
+    public int getWeight() { // ritorna peso della connessione
         return weight;
     }
 
-    public void setWeight(int WEIGHT) {
+    public void setWeight(int WEIGHT) { // imposta peso della connessione
         weight=WEIGHT;
     }
 }

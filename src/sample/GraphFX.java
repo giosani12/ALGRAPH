@@ -4,14 +4,13 @@ import java.util.ArrayList;
 
 public class GraphFX {
 
-    private ArrayList<myNode> nodes;
-    //private ArrayList<ArrayList<myConn>> weights;
-    private myConn weights[][];
-    private int dimension;
-    private int conns;
-    private int capacity;
+    private ArrayList<myNode> nodes; // arrayList dei nodi
+    private myConn weights[][]; // matrice delle linee 
+    private int dimension; // dimensione attuale del grafo (numero di nodi)
+    private int conns; // numero attuale di connessioni
+    private int capacity; // capacità totale del grafo
 
-    public GraphFX(int dim) {
+    public GraphFX(int dim) { // costruttore generico che imposta la dimensione massima del grafo
         capacity=dim;
         dimension=0;
         conns=0;
@@ -19,19 +18,19 @@ public class GraphFX {
         weights= new myConn[dim][dim];
     }
 
-    public ArrayList<myNode> getNodes() {
+    public ArrayList<myNode> getNodes() { // ritorna l'array con tutti i nodi del grafo
         return nodes;
     }
 
-    public int getConns() {
+    public int getConns() { // ritorna il numero di connessioni
         return conns;
     }
 
-    public int getDimension() {
+    public int getDimension() { // ritorna la dimensione attuale del grafo
         return dimension;
     }
 
-    public boolean addNode() {
+    public boolean addNode() { // aggiunge un nodo generico, risponde false solo se il grafo ha raggiunto la dimensione massima
         if (dimension<capacity) {
             myNode temp= new myNode(capacity,dimension);
             nodes.add(dimension,temp);
@@ -41,16 +40,17 @@ public class GraphFX {
         else return false;
     }
 
-    public void addNode(double X, double Y) {
+    public boolean addNode(double X, double Y) { // aggiunge un nodo di coordinate x e y, risponde false solo se il grafo ha raggiunto la dimensione massima
         if (dimension<capacity) {
             myNode temp= new myNode(capacity,dimension, X, Y);
             nodes.add(dimension, temp);
             dimension++;
+            return true;
         }
-        //else doubleArray(), addNode()
+        else return false;
     }
 
-    public myConn addConnection(int a, int b) {
+    public myConn addConnection(int a, int b) { // aggiunge una connessione tra i nodi "a" e "b", calcola anche il peso di questa in base alle coordinate dei nodi
         int weight= (int)Math.sqrt(((nodes.get(a).getCenterX()-nodes.get(b).getCenterX())*(nodes.get(a).getCenterX()-nodes.get(b).getCenterX()))+((nodes.get(a).getCenterY()-nodes.get(b).getCenterY())*(nodes.get(a).getCenterY()-nodes.get(b).getCenterY())));
         myConn newconn =new myConn(weight);
         newconn.setCoords(nodes.get(a).getCenterX(),nodes.get(a).getCenterY(),nodes.get(b).getCenterX(),nodes.get(b).getCenterY());
@@ -73,12 +73,12 @@ public class GraphFX {
         return newconn;
     }
 
-    public myConn addRandomConnection() {
+    public myConn addRandomConnection() { // aggiunge una connessione tra due nodi scelti a caso, restituisce la connessione
         int sel=(int) (Math.random()*(dimension-1));
         int sel2=(int) (Math.random()*(dimension-1));
         myConn temp;
         if (sel<sel2) {
-            if (!nodes.get(sel).getConnection(sel2)) {
+            if (!nodes.get(sel).isAdj(sel2)) {
                 temp=addConnection(sel,sel2);
                 conns=conns+1;
                 return temp;
@@ -86,7 +86,7 @@ public class GraphFX {
             else addRandomConnection();
         }
         else if (sel!=sel2){
-            if (!nodes.get(sel2).getConnection(sel)) {
+            if (!nodes.get(sel2).isAdj(sel)) {
                 temp=addConnection(sel2,sel);
                 conns=conns+1;
                 return temp;
@@ -96,7 +96,7 @@ public class GraphFX {
         return null;
     }
 
-    public int rmConnection(int a, int b) {
+    public int rmConnection(int a, int b) { // rimuove la connessione tra i nodi "a" e "b", ne restituisce il peso
         int out;
         if (a<b) {
             out=weights[a][b].getWeight();
@@ -111,7 +111,7 @@ public class GraphFX {
         return out;
     }
 
-    public void rmConnection(int a) {
+    public void rmConnection(int a) { // rimuove ogni connessione del nodo "a"
         ArrayList<myNode> temp = adjs(a);
         int i=0;
         while (i<temp.size()) {
@@ -119,10 +119,10 @@ public class GraphFX {
         }
     }
 
-    public myNode removeNode(int id) {
+    public myNode removeNode(int id) { // rimuove (se esiste) il nodo "id", altrimenti ritorna null
         if (id<dimension) {
             rmConnection(id);
-            myNode out = nodes.get(id).removeNode();
+            myNode out = nodes.get(id);
             for (int i=0;i<dimension;i++) {
                 nodes.get(i).removeConnection(id);
             }
@@ -133,30 +133,29 @@ public class GraphFX {
         else return null;
     }
 
-    public boolean isEmpty() {
+    public boolean isEmpty() { // ritorna true se il grafo è vuoto, false altrimenti
         return dimension==0;
     }
 
-    public ArrayList<myNode> adjs(int id) {
-        ArrayList<myNode> out=null;
+    public ArrayList<myNode> adjs(int id) { // ritorna un array di nodi contenenti tutti i nodi adiacenti al nodo "id"
+        ArrayList<myNode> out=new ArrayList<myNode>(dimension);
         for (int i=0; i<dimension; i++) {
             if (nodes.get(id).isAdj(i)) out.add(nodes.get(i));
         }
-        out.remove(0);
         return out;
     }
 
-    public int getConnection(int a, int b) {
+    public int getConnection(int a, int b) { // ritorna il peso della connesssione tra "a" e "b", assume che il chiamante ne abbia verificato l'esistenza
         if (a < b) return weights[a][b].getWeight();
         else return weights[b][a].getWeight();
     }
 
-    public myConn getConnectionObj(int a, int b) {
+    public myConn getConnectionObj(int a, int b) { // ritona l'oggetto connessione tra i nodi "a" e "b", assume che il chiamante ne abbia verificato l'esistenza
         if (a < b) return weights[a][b];
         else return weights[b][a];
     }
 
-    public ArrayList<myNode> johnsonAlg(myNode r) {
+    public ArrayList<myNode> johnsonAlg(myNode r) { // applica l'algoritmo di johnson al grafo, restituisce l'array dei nodi ordinati per visita
         PriorityHeap S = new PriorityHeap(dimension);
         S.insert(r,0);
         ArrayList<myNode> T =new ArrayList<myNode>(dimension);
@@ -191,18 +190,27 @@ public class GraphFX {
         return T;
     }
 
-    public void randomGraph(int size) {
+    public void randomGraph(int size) { // costruisce un grafo casuale di dimensione "size"
         for (int i=0;i<size;i++) {
-            double x = (Math.random()*501);
-            double y = (Math.random()*501);
+            double x = (Math.random()*709+46);
+            double y = (Math.random()*402+60);
             addNode(x,y);
         }
-        int edges = (int)(Math.random()*size*(size-1));
+        for (int i=0; i<size;i++) {
+        	if (!nodes.get(i).hasConnection()) {
+	        	int mate=i;
+	        	while ((mate==i)&&(nodes.get(i).isAdj(mate))) {
+	        		mate= (int)(Math.random()*size);
+	        	}
+	        	addConnection(i,mate);
+        	}
+        }
+        /*int edges = (int)(Math.random()*size);
         int i=0;
         while (i<edges) {
             addRandomConnection();
             i++;
-        }
+        }*/
     }
 
 }

@@ -3,44 +3,47 @@ package sample;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.*;
 
 public class Controller {
 
     @FXML
-    private Pane mainPane;
+    private Pane mainPane; // Pane principale
 
-    private GraphFX mainGraph;
+    private GraphFX mainGraph; // Grafo principale
 
-    public void initialize() {
+    public void initialize() { // inizializza schermata
 
     }
-
-    public void saveOnAction(javafx.event.ActionEvent actionEvent) {
-        PriorityHeap temp=new PriorityHeap(4);
-        myNode a = new myNode(4,0);
-        myNode b = new myNode(4,1);
-        temp.insert(a,0);
-        temp.insert(b,1);
-        temp.writeToFile();
-        temp.readFromFile(4);
-        temp.writeToFile();
+    
+    public void saveGraphOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Salva"
+    	
+    }
+    
+    public void loadGraphOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Carica"
+    	
+    }
+    
+    public void newConnOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Edge"
+    	
     }
 
-    public void newGraphOnAction(javafx.event.ActionEvent actionEvent) {
-        mainGraph = new GraphFX(128);
-        mainGraph.randomGraph(5);
-        for (int i=0;i<4;i++) {
+    public void newGraphOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Genera Grafo"
+        mainPane.getChildren().removeIf(n -> n instanceof Circle|| n instanceof Line);
+    	mainGraph = new GraphFX(128);
+        mainGraph.randomGraph(10);
+        for (int i=0;i<10;i++) {
             mainPane.getChildren().add(mainGraph.getNodes().get(i));
         }
         printConns();
     }
 
-    public void printConns() {
+    public void printConns() { // stampa tutte le linee contenute nel grafo mainGraph
         int i=0, j;
         while (i<mainGraph.getDimension()) {
             j=i+1;
             while (j<mainGraph.getDimension()) {
-                if (mainGraph.getNodes().get(i).getConnection(j)) {
+                if (mainGraph.getNodes().get(i).isAdj(j)) {
                     mainPane.getChildren().add(mainGraph.getConnectionObj(i,j));
                 }
                 j++;
@@ -49,7 +52,7 @@ public class Controller {
         }
     }
 
-    public void newNodeOnAction(ActionEvent actionEvent) {
+    public void newNodeOnAction(ActionEvent actionEvent) { // gestisce pulsante "Nodo"
         mainGraph = new GraphFX(128);
         mainGraph.addNode(100,100);
         mainGraph.addNode(100,200);

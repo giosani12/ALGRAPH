@@ -2,9 +2,10 @@ package sample;
 
 import javafx.scene.shape.Circle;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 public class myNode extends Circle {
     private boolean[] connections; // array booleano delle connessioni tra il nodo e gli altri nodi
@@ -47,30 +48,40 @@ public class myNode extends Circle {
         setCenterY(y);
     }
 
-    public void saveNode(FileOutputStream stream) throws IOException // salva il nodo nell outputFileStream
+    public void saveNode(OutputStream stream) throws IOException // salva il nodo nell outputFileStream
     {
         stream.write(pos);
         stream.write(priority);
+        byte[] bytes = new byte[8];
+        ByteBuffer.wrap(bytes).putDouble(getCenterX());
+        stream.write(bytes);
+        ByteBuffer.wrap(bytes).putDouble(getCenterY());
+        stream.write(bytes);
         for (boolean item : connections)
         {
             stream.write(item ? 1 : 0);
         }
     }
 
-    public void loadNode(FileInputStream stream, int lenght) throws IOException // carica nodo da fileInputStream, prende come parametro la lunghezza dell'array
+    public void loadNode(InputStream stream, int lenght) throws IOException // carica nodo da fileInputStream, prende come parametro la lunghezza dell'array
     {																			// di booleani da estrarre
         byte[] data = new byte[lenght];
+        byte[] bytes = new byte[8];
         pos=stream.read();
         priority=stream.read();
+        stream.read(bytes,0,8);
+        setCenterX(ByteBuffer.wrap(bytes).getDouble());
+        stream.read(bytes,0,8);
+        setCenterY(ByteBuffer.wrap(bytes).getDouble());
+        setRadius(10.0);
         stream.read(data,0,lenght);
         for (int X = 0; X < lenght; X++)
         {
             if (data[X] != 0)
             {
                 connections[X] = true;
-                continue;
             }
-            connections[X] = false;
+            else connections[X] = false;
         }
      }
 

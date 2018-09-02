@@ -54,17 +54,14 @@ public class GraphFX {
         int weight= (int)Math.sqrt(((nodes.get(a).getCenterX()-nodes.get(b).getCenterX())*(nodes.get(a).getCenterX()-nodes.get(b).getCenterX()))+((nodes.get(a).getCenterY()-nodes.get(b).getCenterY())*(nodes.get(a).getCenterY()-nodes.get(b).getCenterY())));
         myConn newconn =new myConn(weight);
         newconn.setCoords(nodes.get(a).getCenterX(),nodes.get(a).getCenterY(),nodes.get(b).getCenterX(),nodes.get(b).getCenterY());
-        myConn[] tmp= new myConn[dimension];
         if (a<b) {
-            tmp[b]=newconn;
-            weights[a]=tmp;
-            weights[a][b].setCoords(nodes.get(a).getCenterX(),nodes.get(a).getCenterY(),nodes.get(b).getCenterX(),nodes.get(b).getCenterY());
+            weights[a][b]=newconn;
+        	weights[a][b].setCoords(nodes.get(a).getCenterX(),nodes.get(a).getCenterY(),nodes.get(b).getCenterX(),nodes.get(b).getCenterY());
             nodes.get(a).addConnection(b);
             nodes.get(b).addConnection(a);
         }
         else if (a!=b){
-            tmp[a]=newconn;
-            weights[b]=tmp;
+        	weights[b][a]=newconn;
             weights[b][a].setCoords(nodes.get(b).getCenterX(),nodes.get(b).getCenterY(),nodes.get(a).getCenterX(),nodes.get(a).getCenterY());
             nodes.get(a).addConnection(b);
             nodes.get(b).addConnection(a);
@@ -151,7 +148,7 @@ public class GraphFX {
     }
 
     public myConn getConnectionObj(int a, int b) { // ritona l'oggetto connessione tra i nodi "a" e "b", assume che il chiamante ne abbia verificato l'esistenza
-        if (a < b) return weights[a][b];
+    	if (a < b) return weights[a][b];
         else return weights[b][a];
     }
 
@@ -198,19 +195,19 @@ public class GraphFX {
         }
         for (int i=0; i<size;i++) {
         	if (!nodes.get(i).hasConnection()) {
-	        	int mate=i;
-	        	while ((mate==i)&&(nodes.get(i).isAdj(mate))) {
-	        		mate= (int)(Math.random()*size);
+	        	int mate=(int)(Math.random()*(size-1));
+	        	while ((mate==i)||(nodes.get(i).isAdj(mate))) {
+	        		mate= (int)(Math.random()*(size-1));
 	        	}
 	        	addConnection(i,mate);
         	}
         }
-        /*int edges = (int)(Math.random()*size);
+        int edges = (int)(Math.random()*size);
         int i=0;
         while (i<edges) {
             addRandomConnection();
             i++;
-        }*/
+        }
     }
 
 }

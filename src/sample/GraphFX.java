@@ -136,6 +136,7 @@ public class GraphFX {
 
     public ArrayList<myNode> adjs(int id) { // ritorna un array di nodi contenenti tutti i nodi adiacenti al nodo "id"
         ArrayList<myNode> out=new ArrayList<myNode>(dimension);
+        out.clear();
         for (int i=0; i<dimension; i++) {
             if (nodes.get(id).isAdj(i)) out.add(nodes.get(i));
         }
@@ -152,7 +153,7 @@ public class GraphFX {
         else return weights[b][a];
     }
 
-    public ArrayList<myNode> johnsonAlg(myNode r) { // applica l'algoritmo di johnson al grafo, restituisce l'array dei nodi ordinati per visita
+    /*public ArrayList<myNode> johnsonAlg(myNode r) { // applica l'algoritmo di johnson al grafo, restituisce l'array dei nodi ordinati per visita
         PriorityHeap S = new PriorityHeap(dimension);
         S.insert(r,0);
         ArrayList<myNode> T =new ArrayList<myNode>(dimension);
@@ -168,29 +169,27 @@ public class GraphFX {
         while (!(S.isEmpty())) {
             myNode u=S.deleteMin();
             b[u.getPos()]=false;
-            ArrayList<myNode> adjacent =adjs(u.getPos());
-            int i=0;
-            while (i<adjacent.size()) {
-                if (d[u.getPos()]+getConnection(u.getPos(),adjacent.get(i).getPos())<d[adjacent.get(i).getPos()]) {
-                    if (!(b[adjacent.get(i).getPos()])) {
-                        S.insert(adjacent.get(i),d[u.getPos()]+getConnection(u.getPos(),adjacent.get(i).getPos()));
-                        b[adjacent.get(i).getPos()]=true;
+            for (myNode v : adjs(u.getPos())) {
+                if (d[u.getPos()]+getConnection(u.getPos(),v.getPos())<d[v.getPos()]) {
+                    if (!(b[v.getPos()])) {
+                        S.insert(v,d[u.getPos()]+getConnection(u.getPos(),v.getPos()));
+                        b[v.getPos()]=true;
                     }
                     else {
-                        S.decrease(adjacent.get(i),d[u.getPos()]+getConnection(u.getPos(),adjacent.get(i).getPos()));
+                        S.decrease(v,d[u.getPos()]+getConnection(u.getPos(),v.getPos()));
                     }
-                    T.add(adjacent.get(i).getPos(),u);
-                    d[adjacent.get(i).getPos()]=d[u.getPos()]+getConnection(u.getPos(),adjacent.get(i).getPos());
+                    T.add(v.getPos(),u);
+                    d[v.getPos()]=d[u.getPos()]+getConnection(u.getPos(),v.getPos());
                 }
             }
         }
         return T;
-    }
+    }*/
 
     public void randomGraph(int size) { // costruisce un grafo casuale di dimensione "size"
         for (int i=0;i<size;i++) {
-            double x = (Math.random()*709+46);
-            double y = (Math.random()*402+60);
+            double x = (Math.random()*585+170);
+            double y = (Math.random()*390+72);
             addNode(x,y);
         }
         for (int i=0; i<size;i++) {

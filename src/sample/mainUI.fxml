@@ -8,13 +8,20 @@
 
 <Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
       <children>
-         <Button layoutX="36.0" layoutY="8.0" mnemonicParsing="false" onAction="#loadGraphOnAction" prefHeight="31.0" prefWidth="108.0" text="Carica grafo" />
+         <Button layoutX="36.0" layoutY="64.0" mnemonicParsing="false" onAction="#loadGraphOnAction" prefHeight="31.0" prefWidth="108.0" text="Carica grafo" fx:id="saveGraph" />
          <Button layoutX="387.0" layoutY="8.0" mnemonicParsing="false" onAction="#newGraphOnAction" prefHeight="31.0" prefWidth="108.0" text="Genera grafo" />
          <Button layoutX="594.0" layoutY="8.0" mnemonicParsing="false" onAction="#newNodeOnAction" text="Nodo" />
          <Button layoutX="541.0" layoutY="8.0" mnemonicParsing="false" onAction="#newConnOnAction" prefWidth="57.63" text="Edge" />
          <Button layoutX="681.0" layoutY="8.0" mnemonicParsing="false" onAction="#saveGraphOnAction" prefHeight="31.0" prefWidth="84.0" text="Salva" />
+         <Button layoutX="387.0" layoutY="8.0" mnemonicParsing="false" onAction="#newGraphOnAction" prefHeight="31.0" prefWidth="108.0" text="Genera grafo" />
+         <Button layoutX="594.0" layoutY="8.0" mnemonicParsing="false" onAction="#newNodeOnAction" text="Nodo" />
+         <Button layoutX="541.0" layoutY="8.0" mnemonicParsing="false" prefWidth="57.63" text="Edge" />
+         <Button layoutX="681.0" layoutY="8.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="84.0" text="Salva" />
          <TextField layoutX="201.0" layoutY="8.0" text="Inserisci numero nodi" />
-         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="422.0" layoutX="36.0" layoutY="50.0" stroke="BLACK" strokeType="INSIDE" width="729.0" />
-      	 <TextArea layoutX="36.0" layoutY="476.0" prefHeight="110.0" prefWidth="729.0" fx:id="textTab" text="CASELLA DI TESTO" />
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="410.0" layoutX="160.0" layoutY="62.0" stroke="BLACK" strokeType="INSIDE" width="605.0" />
+      	 <TextArea fx:id="textTab" layoutX="36.0" layoutY="476.0" prefHeight="110.0" prefWidth="729.0" text="CASELLA DI TESTO" />
+      	 <Button layoutX="29.0" layoutY="166.0" mnemonicParsing="false" onAction="#startAlgOnAction" text="Inizia algoritmo" fx:id="startAlg" />
+      	 <Button layoutX="34.0" layoutY="261.0" mnemonicParsing="false" onAction="#nextStepOnAction" text="Prossimo step" fx:id="nextStep" />
+      	 <Button layoutX="31.0" layoutY="347.0" mnemonicParsing="false" onAction="#finalStepOnAction" text="Fine algoritmo" fx:id="finalStep" />
       </children>
 </Pane>

@@ -3,18 +3,23 @@ package sample;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import static java.nio.file.StandardOpenOption.*;
 import java.nio.file.*;
+import java.nio.file.Path;
 import java.io.*;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.*;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 
 public class Controller {
 
@@ -24,7 +29,26 @@ public class Controller {
     @FXML
     private TextArea textTab; // Log testuale
 
+    @FXML
+    private Button saveGraph;
+    
+    @FXML
+    private Button startAlg;
+    
+    @FXML
+    private Button nextStep;
+    
+    @FXML
+    private Button finalStep;
+    
     private GraphFX mainGraph; // Grafo principale
+    private JohnsonAlg mainAlg;
+    private int lastUnode;
+    private boolean finishAlg;
+    
+    double orgSceneX, orgSceneY;
+    double getSceneX, getSceneY;
+    double orgTranslateX, orgTranslateY;
     
     private java.lang.String getLatestNumber() {
         int i=0;
@@ -37,7 +61,11 @@ public class Controller {
     }
 
     public void initialize() { // inizializza schermata
-
+    	nextStep.setDisable(true);
+    	finalStep.setDisable(true);
+    	startAlg.setDisable(true);
+    	saveGraph.setDisable(true);
+    	finishAlg=false;
     }
     
     public void saveGraphOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Salva"
@@ -56,11 +84,72 @@ public class Controller {
     public void loadGraphOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Carica"
     	FileChooser fChoose = new FileChooser();
     	fChoose.setTitle("Seleziona .GRAFO file");
-    	fChoose.showOpenDialog(mainPane.getScene().getWindow());
+    	fChoose.getExtensionFilters().add(new ExtensionFilter("Graph Files", "*.GRAFO"));
+    	File selectedFile =fChoose.showOpenDialog(mainPane.getScene().getWindow());
+    	Path inputPath = selectedFile.toPath();
+    	try (InputStream in = Files.newInputStream(inputPath)/*;
+    		BufferedReader reader =
+    	    new BufferedReader(new InputStreamReader(in))*/) {
+    		//mainGraph = new GraphFX()
+    	} catch (IOException x) {
+   		    System.err.println(x);
+   		}
+    	saveGraph.setDisable(false);
     }
     
     public void newConnOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Edge"
     	
+    }
+    
+    EventHandler<MouseEvent> circleOnMousePressedEventHandler = new EventHandler<MouseEvent>() {
+
+        @Override
+        public void handle(MouseEvent t) {
+            orgSceneX = t.getSceneX();
+            orgSceneY = t.getSceneY();
+            orgTranslateX = ((Circle)(t.getSource())).getTranslateX();
+            orgTranslateY = ((Circle)(t.getSource())).getTranslateY();
+        }
+    };
+    EventHandler<MouseEvent> circleOnMouseDraggedEventHandler = new EventHandler<MouseEvent>() {
+
+        @Override
+        public void handle(MouseEvent t) { double offsetX = t.getSceneX() - orgSceneX;
+        double offsetY = t.getSceneY() - orgSceneY;
+        double newTranslateX = orgTranslateX + offsetX;
+        double newTranslateY = orgTranslateY + offsetY;
+
+            ((Circle)(t.getSource())).setTranslateX(newTranslateX);
+            ((Circle)(t.getSource())).setTranslateY(newTranslateY);
+        }
+    };
+    
+    public void startAlgOnAction(javafx.event.ActionEvent actionEvent) {
+    	mainAlg = new JohnsonAlg(mainGraph.getNodes().get(0), mainGraph.getDimension());
+    	mainGraph.getNodes().get(0).setFill(javafx.scene.paint.Color.RED);
+    	lastUnode=0;
+    	nextStepOnAction(null);
+    }
+    
+    public void nextStepOnAction(javafx.event.ActionEvent actionEvent) {
+    	if (!mainAlg.isSEmpty()) {
+    		mainGraph.getNodes().get(lastUnode).setFill(javafx.scene.paint.Color.BLACK);
+    	   	myNode tempU = mainAlg.firstIterator();
+    	   	tempU.setFill(javafx.scene.paint.Color.RED);
+    	   	for (myNode v : mainGraph.adjs(mainAlg.getUid())) {
+    	   		mainAlg.secondIterator(v, mainGraph.getConnection(mainAlg.getUid(), v.getPos()));
+    	   	}
+    	   	lastUnode=tempU.getPos();
+    	}
+    	else finalStepOnAction(null);
+    }
+    
+    public void finalStepOnAction(javafx.event.ActionEvent actionEvent) {
+    	finishAlg=true;
+    	while (!mainAlg.isSEmpty()) {
+    		
+    	}
+    	mainGraph.getNodes().get(lastUnode).setFill(javafx.scene.paint.Color.BLACK);
     }
 
     public void newGraphOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Genera Grafo"
@@ -70,7 +159,15 @@ public class Controller {
         for (int i=0;i<10;i++) {
             mainPane.getChildren().add(mainGraph.getNodes().get(i));
         }
+        for (Node n: mainPane.getChildren()) {
+            if ( n instanceof Circle) {
+                n.setOnMousePressed(circleOnMousePressedEventHandler);
+                n.setOnMouseDragged(circleOnMouseDraggedEventHandler);
+            }
+        }
         printConns();
+        saveGraph.setDisable(false);
+        startAlg.setDisable(false);
     }
 
     public void printConns() { // stampa tutte le linee contenute nel grafo mainGraph
@@ -100,5 +197,7 @@ public class Controller {
         //mainPane.getChildren().add(mainGraph.getConnectionObj(0,1));
         mainPane.getChildren().add(mainGraph.getNodes().get(0));
         mainPane.getChildren().add(mainGraph.getNodes().get(1));
+        saveGraph.setDisable(false);
+        startAlg.setDisable(false);
     }
 }

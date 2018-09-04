@@ -1,9 +1,5 @@
 package sample;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class PriorityHeap {
@@ -15,31 +11,27 @@ public class PriorityHeap {
         capacity=n;
         dimension=0;
         H= new ArrayList<myNode>(n);
-        for (int i=0; i<n; i++) {
-            myNode tmp = new myNode(n,i,0);
-            H.add(i, tmp);
-        }
+        H.clear();
+        H.add(0,null);
     }
-
+    
     public myNode min() {
-        if (dimension>0) return H.get(0);
+        if (dimension>0) return H.get(1);
         else return null;
     }
 
     public myNode insert(myNode x, int p) {
         if (dimension<capacity) {
-            dimension=dimension+1;
+        	System.out.println("inizio insert pos="+x.getPos());
+        	dimension=dimension+1;
             H.add(dimension, x);
             H.get(dimension).setPriority(p);
             int i=dimension;
-            while ((i>1)&&(H.get(i).getPriority()<H.get((int)1/2).getPriority())) {
-                myNode temp=H.get(i);
-                H.add(i, H.get((int)i/2));
-                H.add((int)i/2, temp);
-                H.get(i).setPos(i);
-                H.get((int)i/2).setPos((int)i/2);
+            while ((i>1)&&(H.get(i).getPriority()<H.get((int)i/2).getPriority())) {
+                swap(i, (int) i / 2);
                 i=(int)i/2;
             }
+            System.out.println("fine insert pos="+H.get(i).getPos());
             return H.get(i);
         }
         else return null;
@@ -50,24 +42,17 @@ public class PriorityHeap {
         if ((2*i<=dim)&&(A.get(2*i).getPriority()<A.get(min).getPriority())) min=2*i;
         if ((2*i+1<=dim)&&(A.get(2*i+1).getPriority()<A.get(min).getPriority())) min=2*i+1;
         if (i!=min) {
-            myNode temp=H.get(i);
-            H.add(i, H.get(min));
-            H.add(min, temp);
-            H.get(i).setPos(i);
-            H.get(min).setPos(min);
+            swap(i, min);
             minHeapRestore(A,min,dim);
         }
     }
 
     public myNode deleteMin() {
         if (dimension>0) {
-            myNode temp=H.get(1);
-            H.add(1,H.get(dimension));
-            H.add(dimension, temp);
-            H.get(1).setPos(1);
-            H.get(dimension).setPos(dimension);
+            swap(1, dimension);
             dimension=dimension-1;
             minHeapRestore(H,1,dimension);
+            System.out.println("In deletemin pos="+H.get(dimension+1).getPos());
             return H.get(dimension+1);
         }
         else return null;
@@ -76,19 +61,28 @@ public class PriorityHeap {
     public void decrease(myNode x, int p) {
         if (p< x.getPriority()) {
             x.setPriority(p);
-            int i = x.getPos();
+            int i = getPosition(x);
             while ((i > 1) && (H.get(i).getPriority() < H.get((int) i / 2).getPriority())) {
-                myNode temp = H.get(i);
-                H.add(i, H.get((int) i / 2));
-                H.add((int) i / 2, temp);
-                H.get(i).setPos(i);
-                H.get((int) i / 2).setPos((int) i / 2);
+                swap(i, (int) i /2);
                 i = (int) i / 2;
             }
         }
     }
 
-    private java.lang.String getLatestNumber() {
+    private void swap(int i, int j) {
+    	myNode temp= H.get(i);
+    	H.set(i, H.get(j));
+    	H.set(j, temp);
+    	temp=null;
+    }
+    
+    private int getPosition(myNode x) {
+    	int i=1;
+    	while (H.get(i)!=x) i++;
+    	return i;
+    }
+    
+    /*private java.lang.String getLatestNumber() {
         int i=0;
         File tmp = new File("./data/PH"+Integer.toString(i)+".ph");
         while (tmp.exists()) {
@@ -124,7 +118,7 @@ public class PriorityHeap {
             return false;
         }
         return true;
-    }
+    }*/
 
     public boolean isEmpty() { return dimension==0; }
 }

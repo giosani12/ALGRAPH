@@ -125,38 +125,47 @@ public class Controller {
     };
     
     public void startAlgOnAction(javafx.event.ActionEvent actionEvent) {
-    	mainAlg = new JohnsonAlg(mainGraph.getNodes().get(0), mainGraph.getDimension());
-    	mainGraph.getNodes().get(0).setFill(javafx.scene.paint.Color.RED);
-    	lastUnode=0;
+    	mainAlg = new JohnsonAlg(mainGraph.getNodes().get(1), mainGraph.getDimension());
+    	mainGraph.getNodes().get(1).setFill(javafx.scene.paint.Color.RED);
+    	System.out.println(mainGraph.getNodes().get(1).getPos());
+    	lastUnode=mainGraph.getNodes().get(1).getPos();
+    	nextStep.setDisable(false);
+    	finalStep.setDisable(false);
+    	startAlg.setDisable(true);
     	nextStepOnAction(null);
     }
     
     public void nextStepOnAction(javafx.event.ActionEvent actionEvent) {
     	if (!mainAlg.isSEmpty()) {
-    		mainGraph.getNodes().get(lastUnode).setFill(javafx.scene.paint.Color.BLACK);
+    		//mainGraph.getNodes().get(lastUnode).setFill(javafx.scene.paint.Color.BLACK);
     	   	myNode tempU = mainAlg.firstIterator();
     	   	tempU.setFill(javafx.scene.paint.Color.RED);
-    	   	for (myNode v : mainGraph.adjs(mainAlg.getUid())) {
-    	   		mainAlg.secondIterator(v, mainGraph.getConnection(mainAlg.getUid(), v.getPos()));
+    	   	System.out.println(tempU.getPos());
+    	   	ArrayList<myNode> v = mainGraph.adjs(tempU.getPos());
+    	   	while(!v.isEmpty()) {
+    	   		myNode temp= v.remove(0);
+    	   		System.out.println("il disturbo mi è causato da:"+temp.getPos()+" e "+tempU.getPos());
+    	   		if (temp.getPos()!=tempU.getPos()) mainAlg.secondIterator(temp, mainGraph.getConnection(tempU.getPos(), temp.getPos()));
     	   	}
     	   	lastUnode=tempU.getPos();
     	}
-    	else finalStepOnAction(null);
+    	else if (!finishAlg)finalStepOnAction(null);
     }
     
     public void finalStepOnAction(javafx.event.ActionEvent actionEvent) {
     	finishAlg=true;
     	while (!mainAlg.isSEmpty()) {
-    		
+    		nextStepOnAction(null);
     	}
-    	mainGraph.getNodes().get(lastUnode).setFill(javafx.scene.paint.Color.BLACK);
+    	System.out.println("FINITO!!");
+    	//mainGraph.getNodes().get(lastUnode).setFill(javafx.scene.paint.Color.BLACK);
     }
 
     public void newGraphOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Genera Grafo"
         mainPane.getChildren().removeIf(n -> n instanceof Circle|| n instanceof Line);
     	mainGraph = new GraphFX(128);
         mainGraph.randomGraph(10);
-        for (int i=0;i<10;i++) {
+        for (int i=1;i<=10;i++) {
             mainPane.getChildren().add(mainGraph.getNodes().get(i));
         }
         for (Node n: mainPane.getChildren()) {
@@ -171,7 +180,7 @@ public class Controller {
     }
 
     public void printConns() { // stampa tutte le linee contenute nel grafo mainGraph
-        int i=0, j;
+        int i=1, j;
         while (i<mainGraph.getDimension()) {
             j=i+1;
             while (j<mainGraph.getDimension()) {
@@ -195,8 +204,8 @@ public class Controller {
         mainGraph.addConnection(0,1);
         printConns();
         //mainPane.getChildren().add(mainGraph.getConnectionObj(0,1));
-        mainPane.getChildren().add(mainGraph.getNodes().get(0));
         mainPane.getChildren().add(mainGraph.getNodes().get(1));
+        mainPane.getChildren().add(mainGraph.getNodes().get(2));
         saveGraph.setDisable(false);
         startAlg.setDisable(false);
     }

@@ -16,8 +16,9 @@ public class myConn extends Line {
         setEndX(bx);
         setEndY(by);
     }
-    public int getWeight() { // ritorna peso della connessione
-        return weight;
+    public int getWeight() { // ritorna peso della connessione, -1 se inesistente
+        if (weight<60000) return weight;
+        else return -1;
     }
 
     public void setWeight(int WEIGHT) { // imposta peso della connessione

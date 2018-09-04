@@ -8,13 +8,15 @@
 
 <Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
       <children>
-         <Button layoutX="36.0" layoutY="8.0" mnemonicParsing="false" onAction="#loadGraphOnAction" prefHeight="31.0" prefWidth="108.0" text="Carica grafo" />
-         <Button layoutX="387.0" layoutY="8.0" mnemonicParsing="false" onAction="#newGraphOnAction" prefHeight="31.0" prefWidth="108.0" text="Genera grafo" />
-         <Button layoutX="594.0" layoutY="8.0" mnemonicParsing="false" onAction="#newNodeOnAction" text="Nodo" />
-         <Button layoutX="541.0" layoutY="8.0" mnemonicParsing="false" onAction="#newConnOnAction" prefWidth="57.63" text="Edge" />
-         <Button layoutX="681.0" layoutY="8.0" mnemonicParsing="false" onAction="#saveGraphOnAction" prefHeight="31.0" prefWidth="84.0" text="Salva" />
-         <TextField layoutX="201.0" layoutY="8.0" text="Inserisci numero nodi" />
-         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="422.0" layoutX="36.0" layoutY="50.0" stroke="BLACK" strokeType="INSIDE" width="729.0" />
-      	 <TextArea layoutX="36.0" layoutY="476.0" prefHeight="110.0" prefWidth="729.0" fx:id="textTab" text="CASELLA DI TESTO" />
+         <Button layoutX="28.0" layoutY="82.0" mnemonicParsing="false" onAction="#loadGraphOnAction" prefHeight="31.0" prefWidth="125.0" text="Carica grafo" />
+         <Button layoutX="373.0" layoutY="8.0" mnemonicParsing="false" onAction="#newGraphOnAction" prefHeight="31.0" prefWidth="108.0" text="Genera grafo" />
+         <Button layoutX="543.0" layoutY="8.0" mnemonicParsing="false" onAction="#newNodeOnAction" prefHeight="31.0" prefWidth="84.0" text="Nodo" />
+         <Button fx:id="saveGraph" layoutX="681.0" layoutY="8.0" mnemonicParsing="false" onAction="#saveGraphOnAction" prefHeight="31.0" prefWidth="84.0" text="Salva" />
+         <TextField fx:id="textNodes" layoutX="196.0" layoutY="8.0" prefHeight="31.0" prefWidth="177.0" promptText="Inserisci numero nodi" />
+         <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="410.0" layoutX="171.0" layoutY="56.0" stroke="BLACK" strokeType="INSIDE" width="605.0" />
+      	 <TextArea fx:id="textTab" layoutX="36.0" layoutY="476.0" prefHeight="110.0" prefWidth="739.0" text="CASELLA DI TESTO" />
+      	 <Button fx:id="startAlg" layoutX="29.0" layoutY="177.0" mnemonicParsing="false" onAction="#startAlgOnAction" prefHeight="31.0" prefWidth="125.0" text="Inizia algoritmo" />
+      	 <Button fx:id="nextStep" layoutX="29.0" layoutY="269.0" mnemonicParsing="false" onAction="#nextStepOnAction" prefHeight="31.0" prefWidth="125.0" text="Prossimo step" />
+      	 <Button fx:id="finalStep" layoutX="29.0" layoutY="359.0" mnemonicParsing="false" onAction="#finalStepOnAction" prefHeight="31.0" prefWidth="125.0" text="Fine algoritmo" />
       </children>
 </Pane>

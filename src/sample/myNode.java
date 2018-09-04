@@ -110,6 +110,7 @@ public class myNode extends Circle {
     }
 
     public boolean isAdj(int b) { // ritorna true se il nodo è adiacente al nodo "sel" false altrimenti
-        return connections[b];
+        if (b!=pos) return connections[b];
+        else return false;
     }
 }

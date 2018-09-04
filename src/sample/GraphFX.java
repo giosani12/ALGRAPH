@@ -15,7 +15,15 @@ public class GraphFX {
         dimension=0;
         conns=0;
         nodes = new ArrayList<myNode>(dim);
+        nodes.clear();
         weights= new myConn[dim][dim];
+        myConn max= new myConn(65536);
+        for (int i=0; i<dim;i++) {
+        	for (int j=0;j<dim;j++) {
+        		weights[i][j]=max;
+        	}
+        }
+        nodes.add(0,null);
     }
 
     public ArrayList<myNode> getNodes() { // ritorna l'array con tutti i nodi del grafo
@@ -32,9 +40,9 @@ public class GraphFX {
 
     public boolean addNode() { // aggiunge un nodo generico, risponde false solo se il grafo ha raggiunto la dimensione massima
         if (dimension<capacity) {
-            myNode temp= new myNode(capacity,dimension);
+        	dimension++;
+        	myNode temp= new myNode(capacity,dimension);
             nodes.add(dimension,temp);
-            dimension++;
             return true;
         }
         else return false;
@@ -42,9 +50,9 @@ public class GraphFX {
 
     public boolean addNode(double X, double Y) { // aggiunge un nodo di coordinate x e y, risponde false solo se il grafo ha raggiunto la dimensione massima
         if (dimension<capacity) {
-            myNode temp= new myNode(capacity,dimension, X, Y);
+        	dimension++;
+        	myNode temp= new myNode(capacity,dimension, X, Y);
             nodes.add(dimension, temp);
-            dimension++;
             return true;
         }
         else return false;
@@ -71,8 +79,8 @@ public class GraphFX {
     }
 
     public myConn addRandomConnection() { // aggiunge una connessione tra due nodi scelti a caso, restituisce la connessione
-        int sel=(int) (Math.random()*(dimension-1));
-        int sel2=(int) (Math.random()*(dimension-1));
+        int sel=(int) (Math.random()*(dimension-1)+1);
+        int sel2=(int) (Math.random()*(dimension-1)+1);
         myConn temp;
         if (sel<sel2) {
             if (!nodes.get(sel).isAdj(sel2)) {
@@ -80,7 +88,7 @@ public class GraphFX {
                 conns=conns+1;
                 return temp;
             }
-            else addRandomConnection();
+            else return addRandomConnection();
         }
         else if (sel!=sel2){
             if (!nodes.get(sel2).isAdj(sel)) {
@@ -88,7 +96,7 @@ public class GraphFX {
                 conns=conns+1;
                 return temp;
             }
-            else addRandomConnection();
+            else return addRandomConnection();
         }
         return null;
     }
@@ -110,7 +118,7 @@ public class GraphFX {
 
     public void rmConnection(int a) { // rimuove ogni connessione del nodo "a"
         ArrayList<myNode> temp = adjs(a);
-        int i=0;
+        int i=1;
         while (i<temp.size()) {
             rmConnection(a, temp.get(i).getPos());
         }
@@ -120,7 +128,7 @@ public class GraphFX {
         if (id<dimension) {
             rmConnection(id);
             myNode out = nodes.get(id);
-            for (int i=0;i<dimension;i++) {
+            for (int i=1;i<dimension+1;i++) {
                 nodes.get(i).removeConnection(id);
             }
             nodes.remove(id);
@@ -136,9 +144,16 @@ public class GraphFX {
 
     public ArrayList<myNode> adjs(int id) { // ritorna un array di nodi contenenti tutti i nodi adiacenti al nodo "id"
         ArrayList<myNode> out=new ArrayList<myNode>(dimension);
-        for (int i=0; i<dimension; i++) {
-            if (nodes.get(id).isAdj(i)) out.add(nodes.get(i));
+        out.clear();
+        for (int i=1; i<dimension+1; i++) {
+            if ((nodes.get(id).isAdj(i))&&(getConnection(id, i)!=-1)) out.add(nodes.get(i));
         }
+        out.trimToSize();
+        /*ArrayList<myNode> out2 = new ArrayList<myNode>(out.size());
+        out2.clear();
+        for (int i=0;i< out.size(); i++) {
+        	out2.add(out.get(i));
+        }*/
         return out;
     }
 
@@ -152,7 +167,7 @@ public class GraphFX {
         else return weights[b][a];
     }
 
-    public ArrayList<myNode> johnsonAlg(myNode r) { // applica l'algoritmo di johnson al grafo, restituisce l'array dei nodi ordinati per visita
+    /*public ArrayList<myNode> johnsonAlg(myNode r) { // applica l'algoritmo di johnson al grafo, restituisce l'array dei nodi ordinati per visita
         PriorityHeap S = new PriorityHeap(dimension);
         S.insert(r,0);
         ArrayList<myNode> T =new ArrayList<myNode>(dimension);
@@ -168,36 +183,34 @@ public class GraphFX {
         while (!(S.isEmpty())) {
             myNode u=S.deleteMin();
             b[u.getPos()]=false;
-            ArrayList<myNode> adjacent =adjs(u.getPos());
-            int i=0;
-            while (i<adjacent.size()) {
-                if (d[u.getPos()]+getConnection(u.getPos(),adjacent.get(i).getPos())<d[adjacent.get(i).getPos()]) {
-                    if (!(b[adjacent.get(i).getPos()])) {
-                        S.insert(adjacent.get(i),d[u.getPos()]+getConnection(u.getPos(),adjacent.get(i).getPos()));
-                        b[adjacent.get(i).getPos()]=true;
+            for (myNode v : adjs(u.getPos())) {
+                if (d[u.getPos()]+getConnection(u.getPos(),v.getPos())<d[v.getPos()]) {
+                    if (!(b[v.getPos()])) {
+                        S.insert(v,d[u.getPos()]+getConnection(u.getPos(),v.getPos()));
+                        b[v.getPos()]=true;
                     }
                     else {
-                        S.decrease(adjacent.get(i),d[u.getPos()]+getConnection(u.getPos(),adjacent.get(i).getPos()));
+                        S.decrease(v,d[u.getPos()]+getConnection(u.getPos(),v.getPos()));
                     }
-                    T.add(adjacent.get(i).getPos(),u);
-                    d[adjacent.get(i).getPos()]=d[u.getPos()]+getConnection(u.getPos(),adjacent.get(i).getPos());
+                    T.add(v.getPos(),u);
+                    d[v.getPos()]=d[u.getPos()]+getConnection(u.getPos(),v.getPos());
                 }
             }
         }
         return T;
-    }
+    }*/
 
     public void randomGraph(int size) { // costruisce un grafo casuale di dimensione "size"
         for (int i=0;i<size;i++) {
-            double x = (Math.random()*709+46);
-            double y = (Math.random()*402+60);
+            double x = (Math.random()*585+170);
+            double y = (Math.random()*390+72);
             addNode(x,y);
         }
-        for (int i=0; i<size;i++) {
+        for (int i=1; i<size+1;i++) {
         	if (!nodes.get(i).hasConnection()) {
-	        	int mate=(int)(Math.random()*(size-1));
+	        	int mate=(int)(Math.random()*(size-1)+1);
 	        	while ((mate==i)||(nodes.get(i).isAdj(mate))) {
-	        		mate= (int)(Math.random()*(size-1));
+	        		mate= (int)(Math.random()*(size-1)+1);
 	        	}
 	        	addConnection(i,mate);
         	}

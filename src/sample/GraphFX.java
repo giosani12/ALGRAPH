@@ -98,7 +98,7 @@ public class GraphFX {
             }
             else return addRandomConnection();
         }
-        return null;
+        return addRandomConnection();
     }
 
     public int rmConnection(int a, int b) { // rimuove la connessione tra i nodi "a" e "b", ne restituisce il peso

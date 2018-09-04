@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 import static java.nio.file.StandardOpenOption.*;
 import java.nio.file.*;
 import java.nio.file.Path;
@@ -43,7 +47,7 @@ public class Controller {
     
     private GraphFX mainGraph; // Grafo principale
     private JohnsonAlg mainAlg;
-    private int lastUnode;
+    //private int lastUnode;
     private boolean finishAlg;
     
     double orgSceneX, orgSceneY;
@@ -66,6 +70,8 @@ public class Controller {
     	startAlg.setDisable(true);
     	saveGraph.setDisable(true);
     	finishAlg=false;
+    	//final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    	//executorService.scheduleAtFixedRate(Controller::nextStepOnAction, 0, 1, TimeUnit.SECONDS);
     }
     
     public void saveGraphOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Salva"
@@ -128,7 +134,7 @@ public class Controller {
     	mainAlg = new JohnsonAlg(mainGraph.getNodes().get(1), mainGraph.getDimension());
     	mainGraph.getNodes().get(1).setFill(javafx.scene.paint.Color.RED);
     	System.out.println(mainGraph.getNodes().get(1).getPos());
-    	lastUnode=mainGraph.getNodes().get(1).getPos();
+    	//lastUnode=mainGraph.getNodes().get(1).getPos();
     	nextStep.setDisable(false);
     	finalStep.setDisable(false);
     	startAlg.setDisable(true);
@@ -137,6 +143,14 @@ public class Controller {
     
     public void nextStepOnAction(javafx.event.ActionEvent actionEvent) {
     	if (!mainAlg.isSEmpty()) {
+    		if (finishAlg)  {
+    			try {
+					TimeUnit.SECONDS.sleep(1);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
     		//mainGraph.getNodes().get(lastUnode).setFill(javafx.scene.paint.Color.BLACK);
     	   	myNode tempU = mainAlg.firstIterator();
     	   	tempU.setFill(javafx.scene.paint.Color.RED);
@@ -147,15 +161,18 @@ public class Controller {
     	   		System.out.println("il disturbo mi è causato da:"+temp.getPos()+" e "+tempU.getPos());
     	   		if (temp.getPos()!=tempU.getPos()) mainAlg.secondIterator(temp, mainGraph.getConnection(tempU.getPos(), temp.getPos()));
     	   	}
-    	   	lastUnode=tempU.getPos();
     	}
-    	else if (!finishAlg)finalStepOnAction(null);
+    	else if (!finishAlg) {
+    		finalStepOnAction(null);
+    	}
     }
     
     public void finalStepOnAction(javafx.event.ActionEvent actionEvent) {
     	finishAlg=true;
-    	while (!mainAlg.isSEmpty()) {
-    		nextStepOnAction(null);
+    	if (!mainAlg.isSEmpty()) {
+	    	while (!mainAlg.isSEmpty()) {
+				nextStepOnAction(null);
+	    	}
     	}
     	System.out.println("FINITO!!");
     	//mainGraph.getNodes().get(lastUnode).setFill(javafx.scene.paint.Color.BLACK);
@@ -163,13 +180,14 @@ public class Controller {
 
     public void newGraphOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Genera Grafo"
         mainPane.getChildren().removeIf(n -> n instanceof Circle|| n instanceof Line);
+        mainAlg=null;
     	mainGraph = new GraphFX(128);
         mainGraph.randomGraph(10);
         for (int i=1;i<=10;i++) {
             mainPane.getChildren().add(mainGraph.getNodes().get(i));
         }
         for (Node n: mainPane.getChildren()) {
-            if ( n instanceof Circle) {
+            if ((n instanceof Circle)||(n instanceof Line)) {
                 n.setOnMousePressed(circleOnMousePressedEventHandler);
                 n.setOnMouseDragged(circleOnMouseDraggedEventHandler);
             }
@@ -181,9 +199,9 @@ public class Controller {
 
     public void printConns() { // stampa tutte le linee contenute nel grafo mainGraph
         int i=1, j;
-        while (i<mainGraph.getDimension()) {
+        while (i<=mainGraph.getDimension()) {
             j=i+1;
-            while (j<mainGraph.getDimension()) {
+            while (j<=mainGraph.getDimension()) {
                 if (mainGraph.getNodes().get(i).isAdj(j)) {
                     boolean tmp = mainPane.getChildren().add(mainGraph.getConnectionObj(i,j));
                     if (!tmp) textTab.setText("Fallita linea " + i);

@@ -41,9 +41,12 @@ public class Controller {
     
     @FXML
     private Button finalStep;
+<<<<<<< HEAD
 
     @FXML
     private TextField textNodes;
+=======
+>>>>>>> 199621121f87287d63e3cc454cc6079d0fedfdea
     
     private GraphFX mainGraph; // Grafo principale
     private JohnsonAlg mainAlg;
@@ -148,7 +151,11 @@ public class Controller {
     	   	ArrayList<myNode> v = mainGraph.adjs(tempU.getPos());
     	   	while(!v.isEmpty()) {
     	   		myNode temp= v.remove(0);
+<<<<<<< HEAD
     	   		System.out.println("il disturbo mi � causato da:"+temp.getPos()+" e "+tempU.getPos());
+=======
+    	   		System.out.println("il disturbo mi � causato da:"+temp.getPos()+" e "+tempU.getPos());
+>>>>>>> 199621121f87287d63e3cc454cc6079d0fedfdea
     	   		if (temp.getPos()!=tempU.getPos()) mainAlg.secondIterator(temp, mainGraph.getConnection(tempU.getPos(), temp.getPos()));
     	   	}
     	   	lastUnode=tempU.getPos();
@@ -168,6 +175,7 @@ public class Controller {
     public void newGraphOnAction(javafx.event.ActionEvent actionEvent) { // gestisce pulsante "Genera Grafo"
         mainPane.getChildren().removeIf(n -> n instanceof Circle|| n instanceof Line);
     	mainGraph = new GraphFX(128);
+<<<<<<< HEAD
         mainGraph.randomGraph(20);
         String tmp = new String (textNodes.getText()) ;
         if (isNumber(tmp) && Integer.parseInt(tmp) < 21) {
@@ -183,14 +191,30 @@ public class Controller {
             printConns();
         }
 
+        mainGraph.randomGraph(10);
+        for (int i=1;i<=10;i++) {
+            mainPane.getChildren().add(mainGraph.getNodes().get(i));
+        }
+        for (Node n: mainPane.getChildren()) {
+            if ( n instanceof Circle) {
+                n.setOnMousePressed(circleOnMousePressedEventHandler);
+                n.setOnMouseDragged(circleOnMouseDraggedEventHandler);
+            }
+        }
+        printConns();
+>>>>>>> 199621121f87287d63e3cc454cc6079d0fedfdea
         saveGraph.setDisable(false);
         startAlg.setDisable(false);
     }
 
     public void printConns() { // stampa tutte le linee contenute nel grafo mainGraph
         int i=1, j;
+<<<<<<< HEAD
         String s_tmp = new String (textNodes.getText()) ;
         while (i<Integer.parseInt(s_tmp)) {
+=======
+        while (i<mainGraph.getDimension()) {
+>>>>>>> 199621121f87287d63e3cc454cc6079d0fedfdea
             j=i+1;
             while (j<Integer.parseInt(s_tmp)) {
                 if (mainGraph.getNodes().get(i).isAdj(j)) {
@@ -217,6 +241,7 @@ public class Controller {
         mainPane.getChildren().add(mainGraph.getNodes().get(2));
         saveGraph.setDisable(false);
         startAlg.setDisable(false);
+<<<<<<< HEAD
     }
 
     public static boolean isNumber (String s) {
@@ -226,5 +251,7 @@ public class Controller {
             return false;
         }
         return true;
+=======
+>>>>>>> 199621121f87287d63e3cc454cc6079d0fedfdea
     }
 }

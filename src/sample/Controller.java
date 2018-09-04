@@ -46,6 +46,11 @@ public class Controller {
     @FXML
     private Button finalStep;
 
+
+    @FXML
+    private TextField textNodes;
+
+
     @FXML
     private TextField textNodes;
     
@@ -206,6 +211,10 @@ public class Controller {
 
     public void printConns() { // stampa tutte le linee contenute nel grafo mainGraph
         int i=1, j;
+        String s_tmp = new String (textNodes.getText()) ;
+        while (i<=Integer.parseInt(s_tmp)) {
+            j=i+1;
+            while (j<=Integer.parseInt(s_tmp)) {
         String s_tmp = new String (textNodes.getText()) ;
         while (i<=Integer.parseInt(s_tmp)) {
             j=i+1;

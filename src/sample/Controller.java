@@ -16,6 +16,7 @@ import java.io.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.*;
 import javafx.stage.FileChooser;
@@ -44,6 +45,9 @@ public class Controller {
     
     @FXML
     private Button finalStep;
+
+    @FXML
+    private TextField textNodes;
     
     private GraphFX mainGraph; // Grafo principale
     private JohnsonAlg mainAlg;
@@ -158,7 +162,7 @@ public class Controller {
     	   	ArrayList<myNode> v = mainGraph.adjs(tempU.getPos());
     	   	while(!v.isEmpty()) {
     	   		myNode temp= v.remove(0);
-    	   		System.out.println("il disturbo mi è causato da:"+temp.getPos()+" e "+tempU.getPos());
+    	   		System.out.println("il disturbo mi ï¿½ causato da:"+temp.getPos()+" e "+tempU.getPos());
     	   		if (temp.getPos()!=tempU.getPos()) mainAlg.secondIterator(temp, mainGraph.getConnection(tempU.getPos(), temp.getPos()));
     	   	}
     	}
@@ -182,26 +186,30 @@ public class Controller {
         mainPane.getChildren().removeIf(n -> n instanceof Circle|| n instanceof Line);
         mainAlg=null;
     	mainGraph = new GraphFX(128);
-        mainGraph.randomGraph(10);
-        for (int i=1;i<=10;i++) {
-            mainPane.getChildren().add(mainGraph.getNodes().get(i));
-        }
-        for (Node n: mainPane.getChildren()) {
-            if ((n instanceof Circle)||(n instanceof Line)) {
-                n.setOnMousePressed(circleOnMousePressedEventHandler);
-                n.setOnMouseDragged(circleOnMouseDraggedEventHandler);
+        mainGraph.randomGraph(20);
+        String tmp = new String (textNodes.getText()) ;
+        if (isNumber(tmp) && Integer.parseInt(tmp) < 21) {
+            for (int i = 1; i <= Integer.parseInt(tmp); i++) {
+                mainPane.getChildren().add(mainGraph.getNodes().get(i));
             }
+            for (Node n : mainPane.getChildren()) {
+                if (n instanceof Circle) {
+                    n.setOnMousePressed(circleOnMousePressedEventHandler);
+                    n.setOnMouseDragged(circleOnMouseDraggedEventHandler);
+                }
+            }
+            printConns();
         }
-        printConns();
         saveGraph.setDisable(false);
         startAlg.setDisable(false);
     }
 
     public void printConns() { // stampa tutte le linee contenute nel grafo mainGraph
         int i=1, j;
-        while (i<=mainGraph.getDimension()) {
+        String s_tmp = new String (textNodes.getText()) ;
+        while (i<=Integer.parseInt(s_tmp)) {
             j=i+1;
-            while (j<=mainGraph.getDimension()) {
+            while (j<=Integer.parseInt(s_tmp)) {
                 if (mainGraph.getNodes().get(i).isAdj(j)) {
                     boolean tmp = mainPane.getChildren().add(mainGraph.getConnectionObj(i,j));
                     if (!tmp) textTab.setText("Fallita linea " + i);
@@ -226,5 +234,14 @@ public class Controller {
         mainPane.getChildren().add(mainGraph.getNodes().get(2));
         saveGraph.setDisable(false);
         startAlg.setDisable(false);
+    }
+
+    public static boolean isNumber (String s) {
+        try {
+            int n = Integer.parseInt(s);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
     }
 }

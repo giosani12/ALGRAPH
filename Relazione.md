@@ -1,0 +1,23 @@
+<h1>ALGRAPH - Algoritmo di Johnson </h1>
+<h4>Funzionalità:</h4>
+Il progetto consiste nella presentazione e visualizzazione grafica dell'algoritmo di Johnson su un grafo non orientato. <br>
+La parte grafica consiste in un file FXML, dotato di un riquadro, dove viene illustrato l'algoritmo passo per passo, e vari bottoni ai lati
+che permettono all'utente di interagire con il programma. <br>
+
+<h4>Scelte implementative:</h4>
+La parte grafica è realizzata con Scene Builder; per quanto riguarda l'implementazione viene utilizzato un controller che permette di gestire le varie strutture dati e l'algoritmo.
+I nodi vengono memorizzati in un array e le connessioni sono memorizzate in una matrice, infine per l'esecuzione dell'algoritmo è stato implementato un heap binario.
+
+<h4>Interazione con l'utente: </h4>
+Una volta eseguito il programma si apre immediatamente la schermata principale, intorno al rettangolo dove viene illustrato il funzionamento dell'algoritmo
+sono presenti dei bottoni che permettono all'utente di interagire con il programma stesso. <br>
+<b>Carica grafo:</b>Permette di caricare un grafo salvato in precedenza.<br>
+<b>Genera grafo:</b>Presente accanto una casella di testo da riempire con un intero, genera un grafo casuale con un numero di nodi pari a quello inserito nella casella di testo.<br>
+<b>Inserisci nodo:</b>Permette di inserire un nodo all'interno del grafo.<br>
+<b>Salva:</b>Permette di salvare il grafo che si sta visualizzando.<br>
+<b>Inizia algoritmo:</b>Fa iniziare l'esecuzione dell'algoritmo.<br>
+<b>Procedi step-by-step:</b>Permette di passare allo step successivo.<br>
+<b>Output finale:</b>Esegue l'algoritmo sul grafo e restituisce l'output finale.<br>
+Inoltre è possibile spostare i nodi trascinandoli dopo averci cliccato sopra con il tasto sinistro del mouse. <br>
+
+<h4>Membri del gruppo:</h4>Sani Giovanni Santilli Francesco

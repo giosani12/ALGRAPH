@@ -1,14 +1,14 @@
-<h1>ALGRAPH - Algoritmo di Johnson </h1>
-<h4>Funzionalità:</h4>
+# ALGRAPH - Algoritmo di Johnson 
+## Funzionalità:
 Il progetto consiste nella presentazione e visualizzazione grafica dell'algoritmo di Johnson su un grafo non orientato. <br>
 La parte grafica consiste in un file FXML, dotato di un riquadro, dove viene illustrato l'algoritmo passo per passo, e vari bottoni ai lati
 che permettono all'utente di interagire con il programma. <br>
 
-<h4>Scelte implementative:</h4>
+## Scelte implementative:
 La parte grafica è realizzata con Scene Builder; per quanto riguarda l'implementazione viene utilizzato un controller che permette di gestire le varie strutture dati e l'algoritmo.
 I nodi vengono memorizzati in un array e le connessioni sono memorizzate in una matrice, infine per l'esecuzione dell'algoritmo è stato implementato un heap binario.
 
-<h4>Interazione con l'utente: </h4>
+## Interazione con l'utente:
 Una volta eseguito il programma si apre immediatamente la schermata principale, intorno al rettangolo dove viene illustrato il funzionamento dell'algoritmo
 sono presenti dei bottoni che permettono all'utente di interagire con il programma stesso. <br>
 <b>Carica grafo: </b>Permette di caricare un grafo salvato in precedenza.<br>
@@ -22,4 +22,5 @@ sono presenti dei bottoni che permettono all'utente di interagire con il program
 Ogni volta che l'utente preme uno dei bottoni compare un messaggio nella parte inferiore delle schermo, questo dimostra che l'operazione richiesta è avvenuta con successo; se invece si cerca di inserire caratteri non permessi compare un alert che blocca l'utente e lo invita a inserire nuovamente i dati.
 
 
-<h4>Membri del gruppo:</h4>Sani Giovanni Santilli Francesco
+## Membri del gruppo:
+Sani Giovanni Santilli Francesco

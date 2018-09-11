@@ -23,4 +23,5 @@ Ogni volta che l'utente preme uno dei bottoni compare un messaggio nella parte i
 
 
 ## Membri del gruppo:
-Sani Giovanni Santilli Francesco
+Sani Giovanni<br>
+Santilli Francesco

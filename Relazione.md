@@ -18,7 +18,7 @@ sono presenti dei bottoni che permettono all'utente di interagire con il program
 <b>Elimina grafo: </b>Permette di eliminare il grafico corrente. <br>
 <b>Inizia algoritmo: </b>Fa iniziare l'esecuzione dell'algoritmo.<br>
 <b>Procedi step-by-step: </b>Permette di passare allo step successivo.<br>
-<b>Output finale: </b>Esegue l'algoritmo sul grafo e restituisce l'output finale.<br>
+<b>Output finale: </b>Esegue l'algoritmo sul grafo e restituisce l'output finale.<br><br>
 Ogni volta che l'utente preme uno dei bottoni compare un messaggio nella parte inferiore delle schermo, questo dimostra che l'operazione richiesta è avvenuta con successo; se invece si cerca di inserire caratteri non permessi compare un alert che blocca l'utente e lo invita a inserire nuovamente i dati.
 
 
